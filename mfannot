@@ -5078,8 +5078,8 @@ sub ExecuteExternalProgram {
     # Read back AnnotPairCollections;
     my $infh = new IO::File "<$outfile_gene"; # Which should be your %OUTFILE%
     if (! $infh){
-        print "Cannot read result for '$genename'; maybe there were problems with the commands?\n";
-        print "See outfile '$outfile' and errfile '$errfile' for more info.\n" if $DEBUG;
+        warn "Cannot read result for '$genename'; maybe there were problems with the commands?\n";
+        die "See outfile '$outfile' and errfile '$errfile' for more info.\n";
         return [];
     }
 
