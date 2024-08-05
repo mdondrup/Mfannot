@@ -1851,7 +1851,7 @@ sub ExtractLibSeqs {
     my $homo_fasta = "";
     foreach my $prot (@$homologous) {
         my $seq = $prot->get_similarprot();
-                  $prot->set_shortname($name);
+                  #$prot->set_shortname($name);
         $homo_fasta .= ">$name\n";
         $seq =~ s/>.+\n//;
         while ($seq ne "") {
