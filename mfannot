@@ -1896,7 +1896,7 @@ sub RunHMM {
     $InFh->close();
 
     # 1. Run Muscle...
-    my $cmd = "$MUSCLEPATH -in '$ProtHomo' -out '$ProtOut' >/dev/null 2>/dev/null";
+    my $cmd = "$MUSCLEPATH -align '$ProtHomo' -output '$ProtOut' >/dev/null";
     print "\n$cmd\n" if $DEBUG;
 
     my $resultat = system("$cmd");
