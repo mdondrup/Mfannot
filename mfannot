@@ -678,7 +678,7 @@ sub GetOptions {
     $INSERTION               = $option->insertion;         # Minimum length for report insertion
     $LIGHT                   = $option->light;             # Don't search for endonuclease and don't search all gene by HMM
     $SQN_FORMAT              = $option->sqnformat;         # If true do mf -> sqn conversion
-    $TBL_FORMAT              = $option->tblformat;         # If true save tbl file
+    $TBL_FORMAT              0 #= $option->tblformat;         # If true save tbl file
     $TMPDIR                  = $option->tmpdir;            # Temporary work directory
     $USEPRM                  = $option->prm;               # 1 if user want use .prm
 
