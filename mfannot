@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w -- -*-Perl-*-
+#!/usr/bin/env perl
 
 ##############################################################################
 #
@@ -42,7 +42,7 @@
 
 require 5.00;
 use strict;
-
+use warnings;
 use IO::File;
 use IO::Dir;
 use Cwd;
