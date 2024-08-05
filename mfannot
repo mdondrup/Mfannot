@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w -- -*-Perl-*-
+#!/usr/bin/env perl
 
 ##############################################################################
 #
@@ -42,7 +42,7 @@
 
 require 5.00;
 use strict;
-
+use warnings;
 use IO::File;
 use IO::Dir;
 use Cwd;
@@ -1755,7 +1755,8 @@ sub RunHMM {
     $InFh->close();
 
     # 1. Run Muscle...
-    my $cmd = "$MUSCLEPATH -in '$ProtHomo' -out '$ProtOut' >/dev/null 2>/dev/null";
+    # now supports Muscle 5
+    my $cmd = "$MUSCLEPATH -align '$ProtHomo' -output '$ProtOut' >/dev/null";
     print "\n$cmd\n" if $DEBUG;
 
     my $resultat = system("$cmd");
@@ -1763,7 +1764,7 @@ sub RunHMM {
     my $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
     my $returncode  = $resultat >> 8;   # exit status of subprogram
     if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-        print "Error in execution of Muscle in sub RunHMM...\n";
+	die "Error in execution of Muscle in sub RunHMM... $cmd\n";
     }
 
     # 2. Run Umac...
@@ -1787,7 +1788,7 @@ sub RunHMM {
     $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
     $returncode  = $resultat >> 8;   # exit status of subprogram
     if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-        print "Error in execution of HMMBuild in sub RunHMM...\n";
+        die "Error in execution of HMMBuild in sub RunHMM...\n";
     }
 
     # 4. Run HMMAlign...
@@ -1799,7 +1800,7 @@ sub RunHMM {
     $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
     $returncode  = $resultat >> 8;   # exit status of subprogram
     if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-        print "Error in execution of HMMAlign in sub RunHMM...\n";
+        die "Error in execution of HMMAlign in sub RunHMM...\n";
     }
 
     return $ProtAln;
@@ -2318,7 +2319,7 @@ sub FindExonsInHypProtArray {
         my $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
         my $returncode  = $resultat >> 8;   # exit status of subprogram
         if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-            print "Error in execution of Exonerate \n";
+            die "Error in execution of Exonerate \n";
         }
 
         my $infh  = new IO::File "<$exonerate_out"
@@ -3242,7 +3243,7 @@ sub CreateAlignForMiniEx {
     my $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
     my $returncode  = $resultat >> 8;   # exit status of subprogram
     if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-        print "Error in execution of Umac in sub CreateAlignForMiniEx...\n";
+        die "Error in execution of Umac in sub CreateAlignForMiniEx...\n";
     }
 
     my $Alignio = new Bio::AlignIO(-format => 'clustalw',
@@ -3304,7 +3305,7 @@ sub RunUmacAndHMMBuild {
     my $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
     my $returncode  = $resultat >> 8;   # exit status of subprogram
     if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-        print "Error in execution of Umac in sub $SubName...\n";
+        die "Error in execution of Umac in sub $SubName...\n";
     }
 
     # 2. Run HMMBuild...
@@ -3316,7 +3317,7 @@ sub RunUmacAndHMMBuild {
     $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
     $returncode  = $resultat >> 8;   # exit status of subprogram
     if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-        print "Error in execution of HMMBuild in sub $SubName...\n";
+        die "Error in execution of HMMBuild in sub $SubName...\n";
     }
 }
 
@@ -3353,7 +3354,7 @@ sub RunHMMSearchForMiniEx {
     my $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
     my $returncode  = $resultat >> 8;   # exit status of subprogram
     if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-        print "Error in execution of HMMsearch \n";
+        die "Error in execution of HMMsearch \n";
     }
 
     my $Searchfh  = new IO::File "<$FileRes"
@@ -4304,7 +4305,7 @@ sub RunHMMSearchForSplice {
     my $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
     my $returncode  = $resultat >> 8;   # exit status of subprogram
     if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-        print "Error in execution of HMMsearch \n";
+        die "Error in execution of HMMsearch \n";
     }
 }
 
@@ -6854,7 +6855,7 @@ sub GetORFForLowConservedGenes {
     my $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
     my $returncode  = $resultat >> 8;   # exit status of subprogram
     if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-        print "Error in execution of HMMsearch in RunHMMSearchForLowConservedGenes subroutine\n";
+        die "Error in execution of HMMsearch in RunHMMSearchForLowConservedGenes subroutine\n";
     }
     chdir("$cwd");
     return $file_out;
@@ -6925,7 +6926,7 @@ sub RunHMMSearchForLowConservedGenes {
 			my $signal      = $resultat & 127;  # SIGNAL received by subprocess, from 0 to 127;
 			my $returncode  = $resultat >> 8;   # exit status of subprogram
 			if ($returncode > 1 || $signal > 0 || $hascoredump == 1) {
-				print "Error in execution of HMMsearch in RunHMMSearchForLowConservedGenes subroutine\n";
+				die "Error in execution of HMMsearch in RunHMMSearchForLowConservedGenes subroutine\n";
 			}
 			last if (-f "$HMM_model_path/$prot.hmm");
 		}
